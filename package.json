@@ -1,0 +1,13 @@
+{
+  "name": "email-template-tester",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently --names 'api,web' \"cd api && npm run dev\" \"cd web && npm run dev\""
+  },
+  "author": "Jeroen Hammann",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

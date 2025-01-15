@@ -1,17 +1,18 @@
 version: "3.8"
+name: email_template_tester
 services:
   web:
+    container_name: email_template_tester_web
     build:
       context: ./web
       dockerfile: Dockerfile
     ports:
       - "3000:80"
-    environment:
-      - VITE_API_URL=http://api:3001
     depends_on:
       - api
 
   api:
+    container_name: email_template_tester_api
     build:
       context: ./api
       dockerfile: Dockerfile

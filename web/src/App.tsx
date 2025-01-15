@@ -16,7 +16,7 @@ function App() {
       try {
         setLoading(true)
         await axios.post(
-          "/api",
+          "/api/",
           {
             email: email.value,
             subject: subject.value,

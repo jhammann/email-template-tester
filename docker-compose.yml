@@ -1,5 +1,4 @@
 version: "3.8"
-name: email_template_tester
 services:
   web:
     container_name: email_template_tester_web

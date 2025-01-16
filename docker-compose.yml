@@ -1,22 +1,23 @@
-version: "3.8"
 services:
   web:
     container_name: email_template_tester_web
     build:
       context: ./web
       dockerfile: Dockerfile
-    ports:
-      - "3000:80"
+    image: email_template_tester_web
     depends_on:
       - api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
 
   api:
     container_name: email_template_tester_api
     build:
       context: ./api
       dockerfile: Dockerfile
-    ports:
-      - "3001:3001"
+    image: email_template_tester_api
     environment:
       - SMTP_HOST=smtp.gmail.com
       - SMTP_PORT=465
@@ -24,4 +25,19 @@ services:
       - SMTP_EMAIL=username@gmail.com
       - SMTP_USER=username@gmail.com
       - SMTP_PASS=password
-
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api`)"
+      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.backend.middlewares=api-stripprefix"
+      - "traefik.http.services.backend.loadbalancer.server.port=3001"
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    ports:
+      - "3000:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik.yml:/etc/traefik/traefik.yml:ro"
+    labels:
+      - "traefik.enable=true"
